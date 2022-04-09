@@ -1,7 +1,4 @@
 
-
-
-
 import pygame
 from ballon import generate_new_ballon
 from label import Label
@@ -19,27 +16,22 @@ CLOCK = pygame.time.Clock()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('BallonShot')
 
-
 def main():
 
     #Game initial setup
     speed = 1
     points = 0
-    playing = True
     label_color = (255,255,255)
     max_ballons = 5
 
     play_bg_music()
-
-    # music
-    
 
     cursor = CursorPointer((230,230,230),25)       
     pygame.mouse.set_cursor(cursor.get_cursor())
 
     #labels
     label_points = Label("Pontuação:",label_color,(30,30))
-    label_final = Label("Voce perdeu a sua pontuação é ",label_color,(350,360))
+    label_final = Label("Voce perdeu a sua pontuação é ",label_color,(300,360))
     label_final.set_visible(False)
     label_speed = Label("Speed:",label_color,(30,60))
     

@@ -1,22 +1,18 @@
 
-
 import pygame
 from random import randint,choice
-WIDTH, HEIGHT = 1080,720
+
 
 ballons_colors =[(61,219,98),(83,219,115),(219,61,75),(219,185,72)]
 
-
 def generate_new_ballon(ballons = []) -> list:
     position = (randint(10,1070), randint(720,760))
-    radius = (randint(50,60),randint(60,90))
+    radius = (randint(50,60), randint(60,90))
     color = choice(ballons_colors)
     
-    ballon = Ballon(color,position,radius)
+    ballon = Ballon(color, position, radius)
     ballons.append(ballon)
     return ballons
-
-
 
 class Ballon:
     def __init__(self,color:tuple, position:tuple, radius:tuple) -> None:

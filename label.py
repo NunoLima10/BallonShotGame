@@ -1,7 +1,7 @@
 import pygame
 
 class Label:
-    def __init__(self,label_text,color,position) -> None:
+    def __init__(self, label_text:str, color:tuple, position:tuple) -> None:
         
         self.defaut_label= label_text
         self.label = label_text
