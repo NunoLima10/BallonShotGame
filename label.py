@@ -20,7 +20,7 @@ class Label:
             text_rect.topleft = self.postion
             surface.blit(text,text_rect)
 
-    def label_text(self,text):
+    def label_add_text(self,text):
        self.label = self.defaut_label + text   
     
     def set_visible(self,state):

@@ -1,68 +1,68 @@
 
+
 import pygame
-
-
+from random import randint,choice
 WIDTH, HEIGHT = 1080,720
 
+ballons_colors =[(61,219,98),(83,219,115),(219,61,75),(219,185,72)]
+
+
+def generate_new_ballon(ballons = []) -> list:
+    position = (randint(10,1070), randint(720,760))
+    radius = (randint(50,60),randint(60,90))
+    color = choice(ballons_colors)
+    
+    ballon = Ballon(color,position,radius)
+    ballons.append(ballon)
+    return ballons
+
+
+
 class Ballon:
-    def __init__(self,color,radius,position) -> None:
+    def __init__(self,color:tuple, position:tuple, radius:tuple) -> None:
         super().__init__()
 
-        #ballon 1
         self.color = color
-        self.radius = radius 
-
         self.position_x ,self.position_y = position
+        self.radius_x, self.radius_y = radius
 
-        # ballon 2
-        self.ballon2_radius = radius / 2.5
-        self.ballon2_position_x = self.position_x
-        self.ballon2_position_y = self.position_y + self.radius
+        self.rect = pygame.Rect(position,radius)
+
+        self.bottom = self.position_y + self.radius_y
+        
 
         # ballon line
         self.line_color = (0,0,0)
-        self.line_size = 40 
+        self.line_size = self.radius_y * 2
         self.line_end = (self.position_x ,self.position_y + self.line_size * 3)
 
         #state
         self.on_focus = False
-
-        #last
-        self.end_position = self.ballon2_position_y + self.ballon2_radius * 2
-
+        
 
     def move(self, speed_x, speed_y)-> None:
         self.position_x -= speed_x
         self.position_y -= speed_y
 
-        self.ballon2_position_x = self.position_x
-        self.ballon2_position_y = self.position_y + self.radius
+        self.rect = pygame.Rect((self.position_x, self.position_y),(self.radius_x, self.radius_y))
 
-        self.line_end = (self.position_x ,self.position_y + self.line_size * 3)
+        self.line_end = (self.rect.centerx ,self.rect.centery + self.line_size)
 
-        self.end_position = self.ballon2_position_y + self.ballon2_radius  * 2
-
+        self.bottom = self.position_y + self.radius_y
 
     def mouse_trigger(self, event) -> None:
-        return event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and self.on_focus
+        return event.button == 1 and self.on_focus
          
 
-    def is_on_focus(self, position) -> bool:
-        deltaX = (self.position_x - position[0]) ** 2
-        deltaY = (self.position_y - position[1]) ** 2
-        ballon1 = self.radius > (deltaX + deltaY) ** 0.5
-
-        ballon2_deltaX = (self.ballon2_position_x - position[0]) ** 2
-        ballon2_deltaY = (self.ballon2_position_y - position[1]) ** 2
-        ballon2 = self.radius > (deltaX + deltaY) ** 0.5
-
-        self.on_focus = ballon1 or ballon2
+    def is_on_focus(self, position) -> None:
+       self.on_focus = self.rect.collidepoint(position)
 
 
     def update(self,surface,speed,mouse_postion)-> None:
         self.move(0,speed)
         self.is_on_focus(mouse_postion)
-        pygame.draw.line(surface, self.line_color, (self.position_x, self.position_y), self.line_end)
-        pygame.draw.circle(surface, self.color, (self.position_x, self.position_y), self.radius)
-        pygame.draw.circle(surface, self.color, (self.ballon2_position_x, self.ballon2_position_y), self.ballon2_radius)
+        pygame.draw.line(surface, self.line_color, self.rect.center, self.line_end)
+        pygame.draw.ellipse(surface,self.color,self.rect)
+        
+        
         
